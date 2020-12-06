@@ -12,7 +12,7 @@ import javax.swing.table.TableRowSorter;
 
 /**
  *
- * @author Victor
+ * @author Ronaldo
  */
 public class viewJTable extends javax.swing.JFrame {
 
@@ -23,25 +23,6 @@ public class viewJTable extends javax.swing.JFrame {
         initComponents();
         DefaultTableModel modelo = (DefaultTableModel) jTProdutos.getModel();
         jTProdutos.setRowSorter(new TableRowSorter(modelo));
-        
-        readJTable();
-    }
-    
-    public void readJTable(){
-        DefaultTableModel modelo = (DefaultTableModel) jTProdutos.getModel();
-        
-        ProdutoDAO pdao = new ProdutoDAO();
-        
-        for(Produto p: pdao.read()){
-            
-            modelo.addRow(new Object[]{
-                p.getId(),
-                p.getDescricao(),
-                p.getQtd(),
-                p.getPreco()
-            
-            });
-        }
     }
 
     /**
@@ -166,11 +147,11 @@ public class viewJTable extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "DESCRIÇÃO", "QTD", "PREÇO"
+                "DESCRIÇÃO", "QTD", "PREÇO"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -197,7 +178,7 @@ public class viewJTable extends javax.swing.JFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
@@ -241,7 +222,6 @@ public class viewJTable extends javax.swing.JFrame {
         p.setQtd(Integer.parseInt(txtQtd.getText()));
         p.setPreco(Double.parseDouble(txtPreco.getText()));
         dao.create(p);
-        readJTable();
    
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
