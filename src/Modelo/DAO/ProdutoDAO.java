@@ -9,7 +9,12 @@ import Conexao.ConnectionFactory;
 import Modelo.bean.Produto;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -26,7 +31,7 @@ public class ProdutoDAO {
         
         // Passando valores para os paramentros
         try {
-            stmt = con.prepareStatement("INSERT INT produto (descricao, qtd, preco)VALUES(?, ? ?)");
+            stmt = con.prepareStatement("INSERT INT produto (descricao, qtd, preco)VALUES(?, ?, ?)");
             stmt.setString(1, p.getDescricao());
             stmt.setInt(2, p.getQtd());
             stmt.setDouble(3, p.getPreco());
@@ -41,6 +46,40 @@ public class ProdutoDAO {
         }
         
     
+    }
+    public List<Produto> read(){
+        
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        List<Produto> produtos = new ArrayList<>();
+        
+        try {
+            stmt = con.prepareStatement("SELECT * FROM produto");
+            rs = stmt.executeQuery();
+            
+            
+            while (rs.next()){
+                
+                Produto produto = new Produto();
+                
+                produto.setId(rs.getInt("id"));
+                produto.setDescricao(rs.getString("descricao"));
+                produto.getQtd(rs.getInt("qtd"));
+                produto.getPreco(rs.getDouble("preco"));
+                produtos.add(produto);
+                
+            }
+                    
+                    } catch (SQLException ex) {
+            Logger.getLogger(ProdutoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        
+        return produtos;
+        
     }
 
  
