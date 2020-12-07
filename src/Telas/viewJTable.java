@@ -7,12 +7,13 @@ package Telas;
 
 import Modelo.DAO.ProdutoDAO;
 import Modelo.bean.Produto;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
 /**
  *
- * @author Ronaldo
+ * @author Victor
  */
 public class viewJTable extends javax.swing.JFrame {
 
@@ -23,6 +24,27 @@ public class viewJTable extends javax.swing.JFrame {
         initComponents();
         DefaultTableModel modelo = (DefaultTableModel) jTProdutos.getModel();
         jTProdutos.setRowSorter(new TableRowSorter(modelo));
+
+        
+        readJTable();
+    }
+    
+    public void readJTable(){
+        DefaultTableModel modelo = (DefaultTableModel) jTProdutos.getModel();
+        modelo.setNumRows(0);
+        ProdutoDAO pdao = new ProdutoDAO();
+        
+        for(Produto p: pdao.read()){
+            
+            modelo.addRow(new Object[]{
+                p.getId(),
+                p.getDescricao(),
+                p.getQtd(),
+                p.getPreco()
+            
+            });
+        }
+
     }
 
     /**
@@ -222,11 +244,36 @@ public class viewJTable extends javax.swing.JFrame {
         p.setQtd(Integer.parseInt(txtQtd.getText()));
         p.setPreco(Double.parseDouble(txtPreco.getText()));
         dao.create(p);
+        
+        txtDesc.setText("");
+        txtQtd.setText("");
+        txtPreco.setText("");
+        
+        readJTable();
    
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         // TODO add your handling code here:
+        if(jTProdutos.getSelectedRow() != -1){
+            Produto p = new Produto();
+            ProdutoDAO dao = new ProdutoDAO();
+            
+            
+            p.setId((int)jTProdutos.getValueAt(jTProdutos.getSelectedRow(), 0));
+            
+            dao.delete(p);
+
+            txtDesc.setText("");
+            txtQtd.setText("");
+            txtPreco.setText("");
+
+            readJTable();
+                
+            
+        }else{
+            JOptionPane.showMessageDialog(null,"Selecione um produto para Excluir");
+        }
         
     }//GEN-LAST:event_btnExcluirActionPerformed
 
@@ -237,11 +284,35 @@ public class viewJTable extends javax.swing.JFrame {
 
     private void jTProdutosKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTProdutosKeyReleased
         // TODO add your handling code here:
+        
+        if (jTProdutos.getSelectedRow() != -1) {
+
+            txtDesc.setText(jTProdutos.getValueAt(jTProdutos.getSelectedRow(), 1).toString());
+            txtQtd.setText(jTProdutos.getValueAt(jTProdutos.getSelectedRow(), 2).toString());
+            txtPreco.setText(jTProdutos.getValueAt(jTProdutos.getSelectedRow(), 3).toString());
+
+        }
     
     }//GEN-LAST:event_jTProdutosKeyReleased
 
     private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
         // TODO add your handling code here:
+        
+        Produto p = new Produto();
+        ProdutoDAO dao = new ProdutoDAO();
+        p.setDescricao(txtDesc.getText());
+        p.setQtd(Integer.parseInt(txtQtd.getText()));
+        p.setPreco(Double.parseDouble(txtPreco.getText()));
+        p.setId((int)jTProdutos.getValueAt(jTProdutos.getSelectedRow(), 0));
+        
+        
+        dao.update(p);
+        
+        txtDesc.setText("");
+        txtQtd.setText("");
+        txtPreco.setText("");
+        
+        readJTable();
     
     }//GEN-LAST:event_btnAtualizarActionPerformed
 

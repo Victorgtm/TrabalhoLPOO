@@ -47,6 +47,14 @@ public class Produto {
     public void setPreco(double preco) {
         this.preco = preco;
     }
+
+    public void getQtd(int aInt) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void getPreco(double aDouble) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     
     
